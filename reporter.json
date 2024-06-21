@@ -1,0 +1,131 @@
+{
+  "config": {
+    "configFile": "/Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/playwright.config.js",
+    "rootDir": "/Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reporter.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 15000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "",
+        "name": "",
+        "testDir": "/Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "version": "1.44.1",
+    "workers": 5,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "ready-to-run/0_beta_script.spec.js",
+      "file": "ready-to-run/0_beta_script.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "test",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "status": "failed",
+                  "duration": 43494,
+                  "error": {
+                    "message": "Error: elementHandle.$$eval: Target page, context or browser has been closed",
+                    "stack": "Error: elementHandle.$$eval: Target page, context or browser has been closed\n    at /Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/ready-to-run/0_beta_script.spec.js:54:45",
+                    "location": {
+                      "file": "/Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/ready-to-run/0_beta_script.spec.js",
+                      "column": 45,
+                      "line": 54
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 52 |\u001b[39m\n \u001b[90m 53 |\u001b[39m         \u001b[90m// Collect the first 3 comments\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 54 |\u001b[39m         results[i]\u001b[33m.\u001b[39mtopComments \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m card\u001b[33m.\u001b[39m$$eval(\u001b[32m'.list[node-type=\"feed_list_commentList\"] .card-review'\u001b[39m\u001b[33m,\u001b[39m commentElements \u001b[33m=>\u001b[39m {\n \u001b[90m    |\u001b[39m                                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 55 |\u001b[39m           \u001b[36mreturn\u001b[39m commentElements\u001b[33m.\u001b[39mslice(\u001b[35m0\u001b[39m\u001b[33m,\u001b[39m \u001b[35m3\u001b[39m)\u001b[33m.\u001b[39mmap(comment \u001b[33m=>\u001b[39m {\n \u001b[90m 56 |\u001b[39m             \u001b[36mconst\u001b[39m commentUser \u001b[33m=\u001b[39m comment\u001b[33m.\u001b[39mquerySelector(\u001b[32m'.name'\u001b[39m)\u001b[33m?\u001b[39m\u001b[33m.\u001b[39minnerText \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 57 |\u001b[39m             \u001b[36mconst\u001b[39m commentText \u001b[33m=\u001b[39m comment\u001b[33m.\u001b[39mquerySelector(\u001b[32m'.txt'\u001b[39m)\u001b[33m?\u001b[39m\u001b[33m.\u001b[39minnerText \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m\u001b[33m;\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/ready-to-run/0_beta_script.spec.js",
+                        "column": 45,
+                        "line": 54
+                      },
+                      "message": "Error: elementHandle.$$eval: Target page, context or browser has been closed\n\n\u001b[0m \u001b[90m 52 |\u001b[39m\n \u001b[90m 53 |\u001b[39m         \u001b[90m// Collect the first 3 comments\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 54 |\u001b[39m         results[i]\u001b[33m.\u001b[39mtopComments \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m card\u001b[33m.\u001b[39m$$eval(\u001b[32m'.list[node-type=\"feed_list_commentList\"] .card-review'\u001b[39m\u001b[33m,\u001b[39m commentElements \u001b[33m=>\u001b[39m {\n \u001b[90m    |\u001b[39m                                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 55 |\u001b[39m           \u001b[36mreturn\u001b[39m commentElements\u001b[33m.\u001b[39mslice(\u001b[35m0\u001b[39m\u001b[33m,\u001b[39m \u001b[35m3\u001b[39m)\u001b[33m.\u001b[39mmap(comment \u001b[33m=>\u001b[39m {\n \u001b[90m 56 |\u001b[39m             \u001b[36mconst\u001b[39m commentUser \u001b[33m=\u001b[39m comment\u001b[33m.\u001b[39mquerySelector(\u001b[32m'.name'\u001b[39m)\u001b[33m?\u001b[39m\u001b[33m.\u001b[39minnerText \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 57 |\u001b[39m             \u001b[36mconst\u001b[39m commentText \u001b[33m=\u001b[39m comment\u001b[33m.\u001b[39mquerySelector(\u001b[32m'.txt'\u001b[39m)\u001b[33m?\u001b[39m\u001b[33m.\u001b[39minnerText \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\n\u001b[2m    at /Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/ready-to-run/0_beta_script.spec.js:54:45\u001b[22m"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-06-21T15:22:12.844Z",
+                  "attachments": [],
+                  "errorLocation": {
+                    "file": "/Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/ready-to-run/0_beta_script.spec.js",
+                    "column": 45,
+                    "line": 54
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "e52d321bfa7c812dab5d-80a8e8cbdfa1d369896d",
+          "file": "ready-to-run/0_beta_script.spec.js",
+          "line": 4,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2024-06-21T15:22:12.593Z",
+    "duration": 44527.399,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -82,6 +82,7 @@
   },
   "dependencies": {
     "@playwright/test": "^1.44.1",
+    "axios": "^1.7.2",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.8",
     "electron-updater": "^6.1.4",
@@ -89,6 +90,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
+    "strip-ansi": "^6.0.1",
     "tree-kill": "^1.2.2"
   },
   "devDependencies": {

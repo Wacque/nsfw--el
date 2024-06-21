@@ -1,25 +1,49 @@
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
-import { exec, spawn, ChildProcessWithoutNullStreams } from 'child_process';
+import { checkFolderAndCreateIfNot, createIpcMessage, delay, resolveHtmlPath } from './util';
+import { ChildProcessWithoutNullStreams, exec, spawn } from 'child_process';
 import kill from 'tree-kill';
 import fs from 'fs';
+import {
+    API_BASE_URL,
+    AUTH_FILE_FOLDER_NAME,
+    AUTH_FILE_NAME,
+    CODEGEN_OUTPUT_FOLDER_NAME,
+    EVENTS,
+    READY_TO_RUN,
+    RUN_OUTPUT_FOLDER_NAME,
+    TaskStatus,
+    TOKEN,
+    TOKEN_KEY
+} from '../../constants';
+import stripAnsi from 'strip-ansi';
 
-export const AUTH_FILE_PATH = path.resolve(__dirname, '../auth/auth.json');
-const CODEGEN_RESULT_PATH = path.resolve(__dirname, '../codegen-result');
-const PLAYWRIGHT_CONFIG_PATH = path.resolve(__dirname, '../config/playwright.config.js');
+const ROOT_PATH = process.cwd();
+
+const AUTH_FILE_FOLDER = path.resolve(ROOT_PATH, AUTH_FILE_FOLDER_NAME);
+const CODEGEN_RESULT_FOLDER = path.resolve(ROOT_PATH, CODEGEN_OUTPUT_FOLDER_NAME);
+const RUN_OUTPUT_FOLDER = path.resolve(ROOT_PATH, RUN_OUTPUT_FOLDER_NAME);
+const CODEGEN_RESULT_FILE = path.resolve(CODEGEN_RESULT_FOLDER, 'my-test.spec.js');
+const READY_TO_RUN_FOLDER = path.resolve(ROOT_PATH, READY_TO_RUN);
+const RUN_ERROR_PATH = path.resolve(ROOT_PATH, 'runError.log');
+const RUN_RESULT_PATH = path.resolve(ROOT_PATH, 'results.json');
+
+
+checkFolderAndCreateIfNot(AUTH_FILE_FOLDER);
+checkFolderAndCreateIfNot(CODEGEN_RESULT_FOLDER);
+checkFolderAndCreateIfNot(RUN_OUTPUT_FOLDER);
+checkFolderAndCreateIfNot(READY_TO_RUN_FOLDER);
 
 const getAuthFilePath = () => {
-   // check if the file exists
-    if (fs.existsSync(AUTH_FILE_PATH)) {
-         return AUTH_FILE_PATH;
+    const filePath = path.resolve(AUTH_FILE_FOLDER, AUTH_FILE_NAME);
+    if (fs.existsSync(filePath)) {
+        return filePath;
     }
-
-    return ""
-}
+    return '';
+};
 
 class AppUpdater {
     constructor() {
@@ -31,6 +55,33 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 let recorderProcess: ChildProcessWithoutNullStreams | null = null;
+
+const sendMessageAfterRecordSuccessEnd = async function() {
+    await delay(100);
+    if (fs.existsSync(CODEGEN_RESULT_FILE)) {
+        const codegenResult = fs.readFileSync(CODEGEN_RESULT_FILE, 'utf-8').toString();
+
+        mainWindow!.webContents.send(EVENTS.RECORDER_STOPPED, createIpcMessage(
+            TaskStatus.Success,
+            'Recorder process successfully stopped.',
+            codegenResult
+        ));
+    } else {
+        mainWindow!.webContents.send(EVENTS.RECORDER_STOPPED, createIpcMessage(
+            TaskStatus.Error,
+            'Recorder process successfully stopped, but no codegen result found.'
+        ));
+
+    }
+};
+
+const getRunErrorLog = function() {
+    if (fs.existsSync(RUN_ERROR_PATH)) {
+        return stripAnsi(fs.readFileSync(RUN_ERROR_PATH, 'utf-8').toString());
+    }
+
+    return '';
+};
 
 const createWindow = async () => {
     const isDebug =
@@ -92,51 +143,63 @@ const createWindow = async () => {
 
     new AppUpdater();
 };
-ipcMain.handle('start-recorder', async (event, url) => {
+
+ipcMain.handle(EVENTS.START_RECORDER, async (event, url) => {
     let recorderOutput = '';
+    console.log('start recorder', path.resolve(AUTH_FILE_FOLDER, AUTH_FILE_NAME));
+    try {
+        recorderProcess = spawn('npx', [
+            'playwright',
+            'codegen',
+            url,
+            '-o',
+            CODEGEN_RESULT_FILE,
+            `--save-storage=${path.resolve(AUTH_FILE_FOLDER, AUTH_FILE_NAME)}`,
+            `--load-storage=${getAuthFilePath()}`
+        ]);
 
-    recorderProcess = spawn('npx', [
-        'playwright',
-        'codegen',
-        url,
-        '-o',
-        path.resolve(CODEGEN_RESULT_PATH, "my-test.spec.js"),
-        `--save-storage=${AUTH_FILE_PATH}`,
-        `--load-storage=${getAuthFilePath()}`
-    ]);
+        recorderProcess.stdout.on('data', (data) => {
+            recorderOutput += data.toString();
+            if (mainWindow) {
+                mainWindow.webContents.send(EVENTS.TEST_OUTPUT, createIpcMessage(TaskStatus.Info, `Recorder: ${data}`));
+            }
+            console.log('recorder 1', data.toString());
+        });
 
-    recorderProcess.stdout.on('data', (data) => {
-        recorderOutput += data.toString();
+        recorderProcess.stderr.on('data', (data) => {
+            recorderOutput += data.toString();
+            if (mainWindow) {
+                mainWindow.webContents.send(EVENTS.TEST_OUTPUT, createIpcMessage(TaskStatus.Error, `Recorder Error: ${data}`));
+            }
+            console.log('recorder 2', data.toString());
+        });
+
+        recorderProcess.on('close', (code) => {
+            console.log('recorder close', code);
+
+            if (mainWindow) {
+                sendMessageAfterRecordSuccessEnd();
+                mainWindow.webContents.send(EVENTS.RECORDER_RESULT, createIpcMessage(TaskStatus.Success, recorderOutput));
+            }
+        });
+
         if (mainWindow) {
-            mainWindow.webContents.send('test-output', `Recorder: ${data}`);
+            mainWindow.webContents.send(EVENTS.RECORDER_STARTED, createIpcMessage(
+                TaskStatus.Success,
+                'Recorder started.'
+            ));
         }
-        console.log('recorder 1', data.toString())
-    });
-
-    recorderProcess.stderr.on('data', (data) => {
-        recorderOutput += data.toString();
+    } catch (error: any) {
         if (mainWindow) {
-            mainWindow.webContents.send('test-output', `Recorder Error: ${data}`);
+            mainWindow.webContents.send(EVENTS.RECORDER_STARTED, createIpcMessage(
+                TaskStatus.Error,
+                `Error: ${error.message}`
+            ));
         }
-        console.log('recorder 2', data.toString())
-    });
-
-    recorderProcess.on('close', (code) => {
-        console.log('recorder close', code)
-
-        if (mainWindow) {
-            mainWindow.webContents.send('recorder-stopped');
-            mainWindow.webContents.send('test-output', `Recorder exited with code ${code}`);
-            mainWindow.webContents.send('recorder-result', recorderOutput);
-        }
-    });
-
-    if (mainWindow) {
-        mainWindow.webContents.send('test-output', 'Recorder started.');
     }
 });
 
-ipcMain.handle('stop-recorder', async () => {
+ipcMain.handle(EVENTS.STOP_RECORDER, async () => {
     if (recorderProcess) {
         const { pid } = recorderProcess;
         console.log('pid', pid);
@@ -144,42 +207,161 @@ ipcMain.handle('stop-recorder', async () => {
             kill(pid!, 'SIGTERM', (err) => {
                 if (err) {
                     if (mainWindow) {
-                        mainWindow.webContents.send('test-output', `Error: ${err.message}`);
+                        mainWindow.webContents.send(EVENTS.RECORDER_STOPPED, createIpcMessage(
+                            TaskStatus.Error,
+                            `Error: ${err.message}`
+                        ));
                     }
                 } else {
                     if (mainWindow) {
-                        mainWindow.webContents.send('recorder-stopped');
+                        sendMessageAfterRecordSuccessEnd();
                     }
                 }
             });
         } catch (error: any) {
             if (mainWindow) {
-                mainWindow.webContents.send('test-output', `Error: ${error.message}`);
+                mainWindow.webContents.send(EVENTS.RECORDER_STOPPED, createIpcMessage(
+                    TaskStatus.Error,
+                    `Error: ${error.message}`
+                ));
             }
         }
     } else {
         if (mainWindow) {
-            mainWindow.webContents.send('test-output', 'No recorder process to stop.');
+            mainWindow.webContents.send(EVENTS.RECORDER_STOPPED, createIpcMessage(
+                TaskStatus.Error,
+                'No recorder process to stop.'
+            ));
         }
     }
 });
 
-ipcMain.handle('run-spec', () => {
-    exec(
-        `npx playwright test --headed ${path.resolve(CODEGEN_RESULT_PATH, "my-test.spec.js")}`,
-        (error, stdout, stderr) => {
+ipcMain.handle(EVENTS.SPEC_PREPARE_READY_TO_RUN, async (event, taskId) => {
+    try {
+        console.log('start');
+        // use node-fetch to get file from /script/get_script, and then save to ready_to_run
+        const fetch = require('node-fetch');
+        const res = await fetch(`${API_BASE_URL}/script/get_script?task_id=${taskId}&script_type=beta`, {
+            headers: {
+                [TOKEN_KEY]: TOKEN
+            }
+        });
+        const body = res.body;
+
+        // get file name from body
+
+        const fileName = res.headers.get('content-disposition')?.split('filename=')[1];
+
+        const filePath = path.resolve(READY_TO_RUN_FOLDER, fileName);
+        body.pipe(fs.createWriteStream(filePath));
+
+        if (mainWindow) {
+            mainWindow.webContents.send(EVENTS.SPEC_PREPARE_RESULT, createIpcMessage(
+                TaskStatus.Success,
+                'Spec prepared.',
+                fileName
+            ));
+        }
+    } catch (e) {
+        mainWindow?.webContents.send(EVENTS.SPEC_PREPARE_RESULT, createIpcMessage(
+            TaskStatus.Error,
+            'load file fail'
+        ));
+    }
+
+});
+
+ipcMain.handle(EVENTS.RUN_SPEC, async (event, fileName: string) => {
+
+    if (mainWindow) {
+        mainWindow.webContents.send(EVENTS.SPEC_RUN_STARTED, createIpcMessage(
+            TaskStatus.Success,
+            'Spec run started.'
+        ));
+    }
+
+    if (fs.existsSync(RUN_ERROR_PATH)) {
+        fs.unlinkSync(RUN_ERROR_PATH);
+    }
+
+    try {
+        const command = `npx playwright test --headed ${path.resolve(READY_TO_RUN_FOLDER, fileName)} > runError.log`;
+        const childProcess = exec(command, (error, stdout, stderr) => {
             if (error) {
-                mainWindow?.webContents.send('test-output', `Error: ${error.message}`);
+                console.log('error1', error);
+                mainWindow?.webContents.send(EVENTS.SPEC_RUN_STATUS, createIpcMessage(
+                    TaskStatus.Error,
+                    getRunErrorLog()
+                ));
                 return;
             }
             if (stderr) {
-                mainWindow?.webContents.send('test-output', `Stderr: ${stderr}`);
+                console.log('error2', stderr);
+                mainWindow?.webContents.send(EVENTS.SPEC_RUN_STATUS, createIpcMessage(
+                    TaskStatus.Error,
+                    getRunErrorLog()
+                ));
                 return;
             }
-            mainWindow?.webContents.send('test-output', `Stdout: ${stdout}`);
-        }
-    );
+            mainWindow?.webContents.send(EVENTS.SPEC_RUN_STATUS, createIpcMessage(
+                TaskStatus.Success,
+                `Stdout: ${stdout}`
+            ));
+        });
+
+        childProcess.on('exit', (code, signal) => {
+            mainWindow?.webContents.send(EVENTS.SPEC_RUN_STATUS, createIpcMessage(
+                code === 0 ? TaskStatus.Success : TaskStatus.Error,
+                `Process exited with code: ${code}, signal: ${signal}`
+            ));
+        });
+
+        childProcess.on('close', (code) => {
+            mainWindow?.webContents.send(EVENTS.SPEC_RUN_STATUS, createIpcMessage(
+                code === 0 ? TaskStatus.Success : TaskStatus.Error,
+                `Process closed with code: ${code}, ${code === 0 ? 'Spec run ended.' : getRunErrorLog()}`
+            ));
+        });
+
+        childProcess.on('error', (err) => {
+            mainWindow?.webContents.send(EVENTS.SPEC_RUN_STATUS, createIpcMessage(
+                TaskStatus.Error,
+                getRunErrorLog()
+            ));
+        });
+
+    } catch (error: any) {
+        console.log('error3', error);
+        mainWindow?.webContents.send(EVENTS.SPEC_RUN_STATUS, createIpcMessage(
+            TaskStatus.Error,
+            getRunErrorLog()
+        ));
+    }
 });
+
+ipcMain.handle('get-run-result-data', async (event) => {
+    if (fs.existsSync(RUN_RESULT_PATH)) {
+        try {
+            console.log(RUN_RESULT_PATH)
+            return JSON.parse(fs.readFileSync(RUN_RESULT_PATH).toString());
+        } catch (e) {
+            console.log(e)
+            return [];
+        }
+    }
+
+    return []
+});
+
+async function fetchDataFromSomewhere() {
+    // 模拟从其他地方获取数据
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({ message: 'Hello from main process!' });
+        }, 1000);
+    });
+}
+
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
@@ -188,15 +370,15 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-    if (mainWindow === null) createWindow();
+    if (mainWindow === null) void createWindow();
 });
 
 app
     .whenReady()
     .then(() => {
-        createWindow();
+        void createWindow();
         app.on('activate', () => {
-            if (mainWindow === null) createWindow();
+            if (mainWindow === null) void createWindow();
         });
     })
     .catch(console.log);
