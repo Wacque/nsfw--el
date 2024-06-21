@@ -22,6 +22,16 @@ const electronHandler = {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
   },
+  startTest: (url: string) => ipcRenderer.invoke('start-test', url),
+  startRecorder: (url: string) => ipcRenderer.invoke('start-recorder', url),
+  stopRecorder: () => ipcRenderer.invoke('stop-recorder'),
+  runSpec: () => ipcRenderer.invoke('run-spec'),
+  onTestOutput: (callback: (message: string) => void) =>
+    ipcRenderer.on('test-output', (event, message) => callback(message)),
+  onRecorderStarted: (callback: () => void) =>
+    ipcRenderer.on('recorder-started', callback),
+  onRecorderStopped: (callback: () => void) =>
+    ipcRenderer.on('recorder-stopped', callback),
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);

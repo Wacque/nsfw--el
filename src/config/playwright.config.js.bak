@@ -1,0 +1,13 @@
+import { devices } from '@playwright/test';
+import { AUTH_FILE_PATH } from '../main/main';
+
+const config = {
+  use: {
+    // 定义所有测试的全局配置
+    storageState: "/Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/src/auth/auth.json",
+    // 使用桌面浏览器的某个设备配置（您可以修改为其他配置）
+    ...devices['Desktop Chrome']
+  }
+};
+
+export default config;
