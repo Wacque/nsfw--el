@@ -32,3 +32,5 @@ export enum TaskStatus {
 }
 
 export const STATIC_FILE_SERVE_PORT = 3018
+export const WS_SERVE_PORT = 3019
+

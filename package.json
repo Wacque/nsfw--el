@@ -97,7 +97,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
     "strip-ansi": "^6.0.1",
-    "tree-kill": "^1.2.2"
+    "tree-kill": "^1.2.2",
+    "ws": "^8.17.1"
   },
   "devDependencies": {
     "@electron/notarize": "^2.1.0",

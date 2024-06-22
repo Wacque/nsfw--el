@@ -17,17 +17,42 @@ import {
     RUN_OUTPUT_FOLDER_NAME, STATIC_FILE_SERVE_PORT,
     TaskStatus,
     TOKEN,
-    TOKEN_KEY
+    TOKEN_KEY, WS_SERVE_PORT
 } from '../../constants';
 import stripAnsi from 'strip-ansi';
 import express from 'express'
+// import WebSocket from 'ws'
 
 const expressApp = express()
 expressApp.use(express.static('.'))
 expressApp.listen(STATIC_FILE_SERVE_PORT, () => {
     console.log('app runs in http://localhost:' + STATIC_FILE_SERVE_PORT)
 })
-
+//
+// const server = new WebSocket.Server({ port: WS_SERVE_PORT });
+//
+// server.on('connection', (ws) => {
+//     console.log('New client connected');
+//
+//     ws.on('message', (message) => {
+//         console.log(`Received: ${message}`);
+//         // Echo the message back to the client
+//         ws.send(`You said: ${message}`);
+//     });
+//
+//     ws.on('close', () => {
+//         console.log('Client disconnected');
+//     });
+//
+//     ws.on('error', (error) => {
+//         console.error(`Error: ${error}`);
+//     });
+//
+//     // Send a welcome message
+//     ws.send('Welcome to the WebSocket server!');
+// });
+//
+// console.log('WebSocket server is listening on ws://localhost:8080');
 
 const ROOT_PATH = process.cwd();
 
