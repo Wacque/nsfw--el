@@ -1,5 +1,5 @@
 import http from './axios';
-import { ApiResponseBase, CreateTaskResponse, initScriptResponse } from '../../interface';
+import { ApiResponseBase, CreateTaskResponse, initScriptResponse, TaskItem } from '../../interface';
 
 export const createTask =  (name: string, description: string) => {
     return http.post<CreateTaskResponse>('/task/create_task', {
@@ -16,7 +16,7 @@ export const initScript = (taskId: number, script: string) => {
 }
 
 export const optimizeScript = (taskId: number, user_prompt: string) => {
-    return http.post<ApiResponseBase<void>>('/script/optimize_script', {
+    return http.post<void>('/script/optimize_script', {
         task_id: taskId,
         user_prompt
     });
@@ -43,4 +43,8 @@ export const submitResult = function(taskId: number, rawData: any[]) {
         task_id: taskId,
         raw_data: rawData
     });
+}
+
+export const getTaskList = function() {
+    return http.get<TaskItem[]>(`/task/get_tasks`);
 }

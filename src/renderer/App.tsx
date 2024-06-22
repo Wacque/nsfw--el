@@ -3,10 +3,11 @@ import { CreateTaskResponse, IpcMessage } from '../../interface';
 import { createTask, debugScript, getScript, initScript, optimizeScript, submitResult } from './api';
 import { TaskStatus } from '../../constants';
 import { compressCode, getLatestState } from './utils';
+import { Button } from 'antd';
 
 const TARGET_URL = 'https://s.weibo.com/';
 
-const App: React.FC = () => {
+const App = () => {
     const [url, setUrl] = useState('');
     const [output, setOutput] = useState<IpcMessage[]>([]);
     const [recording, setRecording] = useState(false);
@@ -148,9 +149,9 @@ const App: React.FC = () => {
                 <div>Create at: {task.created_at}</div>
               </div>
             }
-            <button onClick={uploadResult}>
+            <Button onClick={uploadResult}>
                 submit result
-            </button>
+            </Button>
             <button onClick={startCreateTask}>
                 create task
             </button>

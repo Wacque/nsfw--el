@@ -12,7 +12,14 @@ export interface CreateTaskResponse {
 }
 
 export interface initScriptResponse {
-    task_id: number
+    task_id: number;
+}
+
+export interface TaskItem {
+    description: string;
+    id: string;
+    name: string;
+    status: string;
 }
 
 export interface ApiResponseBase<T> {
