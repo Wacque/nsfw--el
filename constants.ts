@@ -30,3 +30,5 @@ export enum TaskStatus {
     Error = 'error',
     Info = 'info',
 }
+
+export const STATIC_FILE_SERVE_PORT = 3018

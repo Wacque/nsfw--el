@@ -14,12 +14,20 @@ import {
     CODEGEN_OUTPUT_FOLDER_NAME,
     EVENTS,
     READY_TO_RUN,
-    RUN_OUTPUT_FOLDER_NAME,
+    RUN_OUTPUT_FOLDER_NAME, STATIC_FILE_SERVE_PORT,
     TaskStatus,
     TOKEN,
     TOKEN_KEY
 } from '../../constants';
 import stripAnsi from 'strip-ansi';
+import express from 'express'
+
+const expressApp = express()
+expressApp.use(express.static('.'))
+expressApp.listen(STATIC_FILE_SERVE_PORT, () => {
+    console.log('app runs in http://localhost:' + STATIC_FILE_SERVE_PORT)
+})
+
 
 const ROOT_PATH = process.cwd();
 
@@ -30,7 +38,6 @@ const CODEGEN_RESULT_FILE = path.resolve(CODEGEN_RESULT_FOLDER, 'my-test.spec.js
 const READY_TO_RUN_FOLDER = path.resolve(ROOT_PATH, READY_TO_RUN);
 const RUN_ERROR_PATH = path.resolve(ROOT_PATH, 'runError.log');
 const RUN_RESULT_PATH = path.resolve(ROOT_PATH, 'result.json');
-
 
 checkFolderAndCreateIfNot(AUTH_FILE_FOLDER);
 checkFolderAndCreateIfNot(CODEGEN_RESULT_FOLDER);
