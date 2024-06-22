@@ -4,6 +4,7 @@ import Header from '../Component/Header';
 import { TopContext } from '../TopProvider';
 import { STATIC_FILE_SERVE_PORT, TaskStatus } from '../../../constants';
 import { ReloadOutlined } from '@ant-design/icons';
+import ErrorBoundary from 'antd/lib/alert/ErrorBoundary';
 
 const { TextArea } = Input;
 const { Header: AntHeader, Content, Sider, Footer } = Layout;
@@ -93,7 +94,7 @@ const RunPage = () => {
     };
 
     const getTableData = function() {
-        return runResult?.map((item, index) => {
+        return runResult?.filter(item => !!item.content).map((item, index) => {
             return {
                 ...item,
                 key: index
@@ -208,8 +209,10 @@ const RunPage = () => {
                                 </div>
                             } style={{ minHeight: 100 }}>
                                 <div>
-                                    <Table scroll={{ x: 1300 }} pagination={{ pageSize: 3 }} dataSource={getTableData()}
-                                           columns={getTableStruct()} />
+                                  <ErrorBoundary>
+                                      <Table scroll={{ x: 1300 }} pagination={{ pageSize: 3 }} dataSource={getTableData()}
+                                             columns={getTableStruct()} />
+                                  </ErrorBoundary>
                                 </div>
                             </Card>
                         </div>
