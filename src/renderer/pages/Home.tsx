@@ -26,8 +26,8 @@ const TaskItemView = function({ item }: { item: TaskItem }) {
 
     const go = function(item: TaskItem) {
         setSelectedTask(item)
-        navigate('/step1')
-        // navigate('/run')
+        // navigate('/step1')
+        navigate('/run')
     }
 
     return (

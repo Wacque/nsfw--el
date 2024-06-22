@@ -10,9 +10,7 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {
-      "actualWorkers": 1
-    },
+    "metadata": {},
     "preserveOutput": "always",
     "reporter": [
       [
@@ -53,53 +51,27 @@
     "workers": 5,
     "webServer": null
   },
-  "suites": [
+  "suites": [],
+  "errors": [
     {
-      "title": "ready-to-run/6_beta_script.spec.js",
-      "file": "ready-to-run/6_beta_script.spec.js",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "test",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 30000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "",
-              "projectName": "",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "status": "passed",
-                  "duration": 26616,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2024-06-22T08:49:20.485Z",
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "ea474fb644bbce6b2337-212ab4552213f5315caf",
-          "file": "ready-to-run/6_beta_script.spec.js",
-          "line": 8,
-          "column": 5
-        }
-      ]
+      "message": "SyntaxError: /Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/ready-to-run/18_beta_script.spec.js: Unexpected character '，'. (1:2)\n\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 1 |\u001b[39m 当然，请提供模板脚本的内容，我将基于它进行修改并生成符合要求的Playwright脚本。\n \u001b[90m   |\u001b[39m   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m",
+      "stack": "SyntaxError: /Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/ready-to-run/18_beta_script.spec.js: Unexpected character '，'. (1:2)\n\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 1 |\u001b[39m 当然，请提供模板脚本的内容，我将基于它进行修改并生成符合要求的Playwright脚本。\n \u001b[90m   |\u001b[39m   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m",
+      "location": {
+        "file": "/Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/ready-to-run/18_beta_script.spec.js",
+        "line": 1,
+        "column": 2
+      },
+      "snippet": "\u001b[90m   at \u001b[39mready-to-run/18_beta_script.spec.js:1\n\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 1 |\u001b[39m 当然，请提供模板脚本的内容，我将基于它进行修改并生成符合要求的Playwright脚本。\n \u001b[90m   |\u001b[39m  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m"
+    },
+    {
+      "message": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
+      "stack": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments."
     }
   ],
-  "errors": [],
   "stats": {
-    "startTime": "2024-06-22T08:49:20.197Z",
-    "duration": 27345.235,
-    "expected": 1,
+    "startTime": "2024-06-22T10:43:17.380Z",
+    "duration": 65.21700000000001,
+    "expected": 0,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

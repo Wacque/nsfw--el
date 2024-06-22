@@ -70,6 +70,10 @@ body {
 .w-fit {
     width: fit-content;
 }
+.flex-item-center {
+    display: flex;
+    justify-items: center;
+}
 .mb-20px {
     margin-bottom: 20px;
 }
@@ -78,6 +82,9 @@ body {
 }
 .mr-10px {
     margin-right: 10px;
+}
+.mr-20px {
+    margin-right: 20px;
 }
 .mt-20px {
     margin-top: 20px;

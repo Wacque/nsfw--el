@@ -44,7 +44,11 @@ const RunPage = () => {
         runResult,
         submitOptimize,
         debugPrompt,
-        refreshData
+        refreshData,
+        scriptInit,
+        handleStartRecorder,
+        recording,
+        resetError
     } = useContext(TopContext);
     const inputRef = useRef<string>('');
     const [startLoading, setStartLoading] = useState(false);
@@ -81,9 +85,7 @@ const RunPage = () => {
     };
 
     useEffect(() => {
-        console.log(getTableStruct());
-        console.log(runResult);
-        startRunSpec();
+        resetError()
     }, []);
 
     const getError = function() {
@@ -119,16 +121,29 @@ const RunPage = () => {
         }
     };
 
+    const goInit = async function() {
+        try {
+            setStartLoading(true);
+            await scriptInit();
+        } finally {
+            setStartLoading(false);
+        }
+    }
+
+    const goRecord = function() {
+        handleStartRecorder()
+    }
+
     return (
         <Layout style={{ height: '100vh', overflowY: 'scroll' }}>
             <Header />
-            <Spin spinning={runningSpec || startLoading} fullscreen />
+            <Spin spinning={runningSpec || startLoading || recording} fullscreen />
             <Layout className={'wrapper-padding'}>
                 <Layout>
-                    <div className="font-bold w-fit font-14px">
-                        <div>任务 ID：{selectedTask?.id}</div>
-                        <div className="mt-10px">任务名称：{selectedTask?.name}</div>
-                        <div className="font-bold mt-10px">任务描述: {selectedTask?.description}</div>
+                    <div className="font-bold w-fit flex-item-center  font-14px">
+                        <div className={'mr-20px'}>任务 ID：{selectedTask?.id}</div>
+                        <div className="mr-20px">任务名称：{selectedTask?.name}</div>
+                        <div className="font-bold mr-20px">任务描述: {selectedTask?.description}</div>
                     </div>
                     <Divider />
                     <Content>
@@ -146,6 +161,10 @@ const RunPage = () => {
                                                 onClick={startOptimize}>优化</Button>
                                         <Button type="default" className="mr-10px" onClick={startRunSpec}>测试</Button>
                                         <Button type="default" className="mr-10px">发布</Button>
+                                    </div>
+                                    <div className={'mt-20px'}>
+                                        <Button type="default" className="mr-10px" onClick={goInit}>初始化任务</Button>
+                                        <Button type="default" className="mr-10px" onClick={goRecord}>开始录制</Button>
                                     </div>
                                 </Card>
                             </Flex>

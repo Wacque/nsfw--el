@@ -25,7 +25,8 @@ interface ITopContext {
     setCodegenResult: Dispatch<string>,
     debugPrompt: () => Promise<void>,
     runStatus: TaskStatus,
-    refreshData: () => void
+    refreshData: () => void,
+    resetError: () => void,
 }
 
 export const TopContext = createContext<ITopContext>({} as ITopContext);
@@ -67,6 +68,7 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
 
             if (message.status === TaskStatus.Success) {
                 setCodegenResult(message?.data ?? "")
+                messageApi.success('录制完成')
             }
         };
 
@@ -164,7 +166,7 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
     const scriptInit = async function() {
         const _task = await getLatestState(setSelectedTask);
         const _codegenResult = await getLatestState(setCodegenResult);
-        const res = await initScript(_task?.id , _codegenResult!);
+        const res = await initScript(Number(_task?.id!) , _codegenResult!);
         await afterInitScript(res.data.task_id);
     }
 
@@ -195,6 +197,11 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
         void submitResult(_task!.id, res)
     }
 
+    const resetError = function() {
+        setRunError("")
+        setRunStatus(TaskStatus.Success)
+    }
+
     return <TopContext.Provider value={{
         taskList,
         setTaskList,
@@ -214,7 +221,8 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
         setCodegenResult,
         debugPrompt,
         runStatus,
-        refreshData
+        refreshData,
+        resetError
     }}>
         {children}
         {contextHolder}
