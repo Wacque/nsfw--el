@@ -55,18 +55,18 @@
   },
   "suites": [
     {
-      "title": "ready-to-run/0_beta_script.spec.js",
-      "file": "ready-to-run/0_beta_script.spec.js",
+      "title": "ready-to-run/6_beta_script.spec.js",
+      "file": "ready-to-run/6_beta_script.spec.js",
       "column": 0,
       "line": 0,
       "specs": [
         {
           "title": "test",
-          "ok": false,
+          "ok": true,
           "tags": [],
           "tests": [
             {
-              "timeout": 120000,
+              "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
               "projectId": "",
@@ -74,46 +74,22 @@
               "results": [
                 {
                   "workerIndex": 0,
-                  "status": "failed",
-                  "duration": 43494,
-                  "error": {
-                    "message": "Error: elementHandle.$$eval: Target page, context or browser has been closed",
-                    "stack": "Error: elementHandle.$$eval: Target page, context or browser has been closed\n    at /Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/ready-to-run/0_beta_script.spec.js:54:45",
-                    "location": {
-                      "file": "/Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/ready-to-run/0_beta_script.spec.js",
-                      "column": 45,
-                      "line": 54
-                    },
-                    "snippet": "\u001b[0m \u001b[90m 52 |\u001b[39m\n \u001b[90m 53 |\u001b[39m         \u001b[90m// Collect the first 3 comments\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 54 |\u001b[39m         results[i]\u001b[33m.\u001b[39mtopComments \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m card\u001b[33m.\u001b[39m$$eval(\u001b[32m'.list[node-type=\"feed_list_commentList\"] .card-review'\u001b[39m\u001b[33m,\u001b[39m commentElements \u001b[33m=>\u001b[39m {\n \u001b[90m    |\u001b[39m                                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 55 |\u001b[39m           \u001b[36mreturn\u001b[39m commentElements\u001b[33m.\u001b[39mslice(\u001b[35m0\u001b[39m\u001b[33m,\u001b[39m \u001b[35m3\u001b[39m)\u001b[33m.\u001b[39mmap(comment \u001b[33m=>\u001b[39m {\n \u001b[90m 56 |\u001b[39m             \u001b[36mconst\u001b[39m commentUser \u001b[33m=\u001b[39m comment\u001b[33m.\u001b[39mquerySelector(\u001b[32m'.name'\u001b[39m)\u001b[33m?\u001b[39m\u001b[33m.\u001b[39minnerText \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 57 |\u001b[39m             \u001b[36mconst\u001b[39m commentText \u001b[33m=\u001b[39m comment\u001b[33m.\u001b[39mquerySelector(\u001b[32m'.txt'\u001b[39m)\u001b[33m?\u001b[39m\u001b[33m.\u001b[39minnerText \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m\u001b[33m;\u001b[39m\u001b[0m"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "/Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/ready-to-run/0_beta_script.spec.js",
-                        "column": 45,
-                        "line": 54
-                      },
-                      "message": "Error: elementHandle.$$eval: Target page, context or browser has been closed\n\n\u001b[0m \u001b[90m 52 |\u001b[39m\n \u001b[90m 53 |\u001b[39m         \u001b[90m// Collect the first 3 comments\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 54 |\u001b[39m         results[i]\u001b[33m.\u001b[39mtopComments \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m card\u001b[33m.\u001b[39m$$eval(\u001b[32m'.list[node-type=\"feed_list_commentList\"] .card-review'\u001b[39m\u001b[33m,\u001b[39m commentElements \u001b[33m=>\u001b[39m {\n \u001b[90m    |\u001b[39m                                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 55 |\u001b[39m           \u001b[36mreturn\u001b[39m commentElements\u001b[33m.\u001b[39mslice(\u001b[35m0\u001b[39m\u001b[33m,\u001b[39m \u001b[35m3\u001b[39m)\u001b[33m.\u001b[39mmap(comment \u001b[33m=>\u001b[39m {\n \u001b[90m 56 |\u001b[39m             \u001b[36mconst\u001b[39m commentUser \u001b[33m=\u001b[39m comment\u001b[33m.\u001b[39mquerySelector(\u001b[32m'.name'\u001b[39m)\u001b[33m?\u001b[39m\u001b[33m.\u001b[39minnerText \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 57 |\u001b[39m             \u001b[36mconst\u001b[39m commentText \u001b[33m=\u001b[39m comment\u001b[33m.\u001b[39mquerySelector(\u001b[32m'.txt'\u001b[39m)\u001b[33m?\u001b[39m\u001b[33m.\u001b[39minnerText \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\n\u001b[2m    at /Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/ready-to-run/0_beta_script.spec.js:54:45\u001b[22m"
-                    }
-                  ],
+                  "status": "passed",
+                  "duration": 26616,
+                  "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2024-06-21T15:22:12.844Z",
-                  "attachments": [],
-                  "errorLocation": {
-                    "file": "/Users/wurengui/Code/code-self/nsfmw/electron-react-boilerplate/ready-to-run/0_beta_script.spec.js",
-                    "column": 45,
-                    "line": 54
-                  }
+                  "startTime": "2024-06-22T08:49:20.485Z",
+                  "attachments": []
                 }
               ],
-              "status": "unexpected"
+              "status": "expected"
             }
           ],
-          "id": "e52d321bfa7c812dab5d-80a8e8cbdfa1d369896d",
-          "file": "ready-to-run/0_beta_script.spec.js",
-          "line": 4,
+          "id": "ea474fb644bbce6b2337-212ab4552213f5315caf",
+          "file": "ready-to-run/6_beta_script.spec.js",
+          "line": 8,
           "column": 5
         }
       ]
@@ -121,11 +97,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2024-06-21T15:22:12.593Z",
-    "duration": 44527.399,
-    "expected": 0,
+    "startTime": "2024-06-22T08:49:20.197Z",
+    "duration": 27345.235,
+    "expected": 1,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }

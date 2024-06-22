@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { CreateTaskResponse, IpcMessage } from '../../interface';
-import { createTask, debugScript, getScript, initScript, optimizeScript, submitResult } from './api';
-import { TaskStatus } from '../../constants';
-import { compressCode, getLatestState } from './utils';
+import { CreateTaskResponse, IpcMessage } from '../../../interface';
+import { createTask, debugScript, getScript, initScript, optimizeScript, submitResult } from '../api';
+import { TARGET_URL, TaskStatus } from '../../../constants';
+import { getLatestState } from '../utils';
 import { Button } from 'antd';
-
-const TARGET_URL = 'https://s.weibo.com/';
+import '../styles/app.scss'
+import Header from '../Component/Header';
 
 const App = () => {
     const [url, setUrl] = useState('');
@@ -143,6 +143,7 @@ const App = () => {
 
     return (
         <div>
+            <Header/>
             {
                 task && <div>
                 <div>Id: {task.task_id}</div>

@@ -1,4 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Noto+Serif+SC:wght@200..900&display=swap');
 * {
     margin: 0;
     padding: 0;
+}
+body {
+    width: 100%;
+    overflow: hidden;
+    font-family: "Noto Serif SC", serif;
+}
+
+.head {
+    padding-top: 24px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+}
+
+
+.font-song {
+    font-family: "Noto Serif SC", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+.font-noto {
+    font-family: "Noto Sans TC", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-end {
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.font-14px {
+    font-size: 14px;
+}
+
+.font-20px {
+    font-size: 20px;
+}
+
+.font-30px {
+    font-size: 30px;
+}
+.font-40px {
+    font-size: 40px;
+}
+.font-bold {
+    font-weight: bold;
+}
+.w-fit {
+    width: fit-content;
+}
+.mb-20px {
+    margin-bottom: 20px;
+}
+.mt-10px {
+    margin-top: 10px;
+}
+.mr-10px {
+    margin-right: 10px;
+}
+.mt-20px {
+    margin-top: 20px;
+}
+.text-black {
+    color: black;
+}
+.wrapper-padding {
+    padding: 0  20px;
+    box-sizing: border-box;
 }

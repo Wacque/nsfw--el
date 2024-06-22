@@ -29,7 +29,7 @@ const RUN_OUTPUT_FOLDER = path.resolve(ROOT_PATH, RUN_OUTPUT_FOLDER_NAME);
 const CODEGEN_RESULT_FILE = path.resolve(CODEGEN_RESULT_FOLDER, 'my-test.spec.js');
 const READY_TO_RUN_FOLDER = path.resolve(ROOT_PATH, READY_TO_RUN);
 const RUN_ERROR_PATH = path.resolve(ROOT_PATH, 'runError.log');
-const RUN_RESULT_PATH = path.resolve(ROOT_PATH, 'results.json');
+const RUN_RESULT_PATH = path.resolve(ROOT_PATH, 'result.json');
 
 
 checkFolderAndCreateIfNot(AUTH_FILE_FOLDER);

@@ -37,11 +37,11 @@ const electronHandler = {
         ipcRenderer.on(EVENTS.SPEC_RUN_STATUS, (event, msg: IpcMessage) => callback(msg)),
     onSpecRunStarted: (callback: (msg: IpcMessage) => void) =>
         ipcRenderer.on(EVENTS.SPEC_RUN_STARTED, (event, msg: IpcMessage) => callback(msg)),
-    onSpecRunEnded: (callback: (msg: IpcMessage) => void) =>
-        ipcRenderer.on(EVENTS.SPEC_RUN_ENDED, (event, msg: IpcMessage) => callback(msg)),
+    // onSpecRunEnded: (callback: (msg: IpcMessage) => void) =>
+    //     ipcRenderer.on(EVENTS.SPEC_RUN_ENDED, (event, msg: IpcMessage) => callback(msg)),
     onPrepareRun: (callback: (msg: IpcMessage) => void) =>
         ipcRenderer.on(EVENTS.SPEC_PREPARE_RESULT, (event, msg: IpcMessage) => callback(msg)),
-    getRunResultData: () => ipcRenderer.invoke('get-run-result-data')
+    getRunResultData: () => ipcRenderer.invoke(EVENTS.GET_RUN_RESULT_DATA)
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);
