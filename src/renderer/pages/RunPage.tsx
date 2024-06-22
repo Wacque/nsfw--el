@@ -1,38 +1,12 @@
 import React, { Fragment, useContext, useEffect, useRef, useState } from 'react';
-import { Alert, Button, Card, Divider, Flex, Input, Layout, Spin, Table } from 'antd';
+import { Alert, Button, Card, Divider,Image, Flex, Input, Layout, Modal, Spin, Table, Tooltip } from 'antd';
 import Header from '../Component/Header';
 import { TopContext } from '../TopProvider';
-import { TaskStatus } from '../../../constants';
-import {ReloadOutlined} from '@ant-design/icons';
+import { STATIC_FILE_SERVE_PORT, TaskStatus } from '../../../constants';
+import { ReloadOutlined } from '@ant-design/icons';
 
 const { TextArea } = Input;
 const { Header: AntHeader, Content, Sider, Footer } = Layout;
-
-const commonRender = (text: any) => {
-    if (typeof text === 'string') {
-        // Check if the string is a URL of an image
-        if (text.match(/\.(jpeg|jpg|gif|png)$/) != null) {
-            return <img src={text} alt="img" style={{ width: '100px' }} />;
-        }
-
-        // Check if the string is a URL
-        try {
-            const url = new URL(text);
-            return <a href={text} target="_blank" rel="noopener noreferrer">{text}</a>;
-        } catch (e) {
-            // If text is not a valid URL, treat it as a regular string
-            return text;
-        }
-    }
-
-    if (typeof text === 'number') {
-        return text;
-    }
-
-    // Convert other types to string for rendering
-    return JSON.stringify(text);
-};
-
 
 const RunPage = () => {
     const {
@@ -62,6 +36,7 @@ const RunPage = () => {
                     title: key,
                     dataIndex: key,
                     key: key,
+                    ellipsis: true,
                     render: (text: string) => commonRender(text)
                 };
             });
@@ -69,6 +44,52 @@ const RunPage = () => {
 
         return [];
 
+    };
+
+    const commonRender = (text: any) => {
+        if (typeof text === 'string') {
+            // Check if the string is a URL of an image
+            if (text.match(/\.(jpeg|jpg|gif|png)$/) != null) {
+                const url = `http://localhost:${STATIC_FILE_SERVE_PORT}/${text}`
+                return <Image
+                    src={url}
+                    style={{
+                        maxWidth: '150px',
+                        maxHeight: '150px'
+                    }}
+                    preview={{
+                        mask: "点击预览",
+                        onVisibleChange: (value) => { console.log(value); }
+                    }}
+                />;
+            }
+
+            // Check if the string is a URL
+            try {
+                const url = new URL(text);
+                return <a href={text} target="_blank" rel="noopener noreferrer">{text}</a>;
+            } catch (e) {
+                // If text is not a valid URL, treat it as a regular string
+                return text;
+            }
+        }
+
+        if (typeof text === 'number') {
+            return text;
+        }
+
+        // Convert other types to string for rendering
+        return <Tooltip placement="topLeft" title={text}>
+ 	   <span style={{
+           whiteSpace: 'nowrap',
+           overflow: 'hidden',
+           textOverflow: 'ellipsis',
+           maxWidth: 150,
+           display: 'inline-block'
+       }}>
+ 		 {JSON.stringify(text)}
+ 	   </span>
+        </Tooltip>;
     };
 
     const getTableData = function() {
@@ -86,8 +107,8 @@ const RunPage = () => {
     };
 
     useEffect(() => {
-        resetError()
-        resetResult()
+        resetError();
+        resetResult();
     }, []);
 
     const getError = function() {
@@ -130,11 +151,11 @@ const RunPage = () => {
         } finally {
             setStartLoading(false);
         }
-    }
+    };
 
     const goRecord = function() {
-        handleStartRecorder()
-    }
+        handleStartRecorder();
+    };
 
     return (
         <Layout style={{ height: '100vh', overflowY: 'scroll' }}>
