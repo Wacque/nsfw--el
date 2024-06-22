@@ -27,6 +27,9 @@ interface ITopContext {
     runStatus: TaskStatus,
     refreshData: () => void,
     resetError: () => void,
+    resetResult: () => void,
+    loadTask: () => void,
+    startCreateTask: (name: string, description: string) => Promise<void>
 }
 
 export const TopContext = createContext<ITopContext>({} as ITopContext);
@@ -49,12 +52,7 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
     const [runStatus, setRunStatus] = useState<TaskStatus>(TaskStatus.Success);
 
     useEffect(() => {
-        getTaskList().then((res) => {
-            setTaskList(res.data);
-        }).finally(() => {
-            setOnLoadTask(false)
-        })
-
+        loadTask()
         const handleTestOutput = (message: IpcMessage) => {
             setOutput((prevOutput) => [...prevOutput, message]);
         };
@@ -103,6 +101,9 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
         };
 
         const handlePrepareRun = function(e: IpcMessage) {
+
+            console.log('setPrepareRunFileName',e)
+
             if(e.data) {
                 setPrepareRunFileName(e.data)
             }
@@ -116,6 +117,16 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
         window.electron.onSpecRunStatus(handelSpecRunStatus);
         window.electron.onPrepareRun(handlePrepareRun)
     }, []);
+
+    const loadTask = function() {
+        setOnLoadTask(true)
+        getTaskList().then((res) => {
+            setTaskList(res.data);
+        }).finally(() => {
+            setOnLoadTask(false)
+        })
+
+    }
 
     const refreshData = async function() {
         const res = await getRunResultData()
@@ -137,8 +148,15 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
         setRunError("")
         setRunStatus(TaskStatus.Success)
         const _fileName = await getLatestState(setPrepareRunFileName)
+        console.log(_fileName, 'handleRunSpec')
 
         if(_fileName) {
+            void window.electron.runSpec(_fileName!);
+        } else {
+            const _task = await getLatestState(setSelectedTask)
+            console.log(_task)
+            await getPreparedFile(Number(_task?.id))
+            const _fileName = await getLatestState(setPrepareRunFileName)
             void window.electron.runSpec(_fileName!);
         }
     };
@@ -148,9 +166,10 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
     }
 
 
-    const startCreateTask = async function() {
-        const res = await createTask('hello world', 'this is a test task');
+    const startCreateTask = async function(name: string, description: string) {
+        await createTask(name, description);
         // setTask(res!.data!);
+        loadTask()
     };
 
     const submitOptimize = async function(userPrompt: string) {
@@ -190,16 +209,20 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
         return await window.electron.getRunResultData()
     }
 
-    const uploadResult = async function() {
-        const res = await window.electron.getRunResultData()
-        console.log('res', res)
-        const _task = await getLatestState(selectedTask)
-        void submitResult(_task!.id, res)
-    }
+    // const uploadResult = async function() {
+    //     const res = await window.electron.getRunResultData()
+    //     console.log('res', res)
+    //     const _task = await getLatestState(selectedTask)
+    //     void submitResult(_task!.id, res)
+    // }
 
     const resetError = function() {
         setRunError("")
         setRunStatus(TaskStatus.Success)
+    }
+
+    const resetResult = function() {
+        setRunResult([])
     }
 
     return <TopContext.Provider value={{
@@ -222,7 +245,10 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
         debugPrompt,
         runStatus,
         refreshData,
-        resetError
+        resetError,
+        resetResult,
+        loadTask,
+        startCreateTask
     }}>
         {children}
         {contextHolder}

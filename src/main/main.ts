@@ -154,7 +154,7 @@ ipcMain.handle(EVENTS.START_RECORDER, async (event, url) => {
             url,
             '-o',
             CODEGEN_RESULT_FILE,
-            `--save-storage=${path.resolve(AUTH_FILE_FOLDER, AUTH_FILE_NAME)}`,
+            // `--save-storage=${path.resolve(AUTH_FILE_FOLDER, AUTH_FILE_NAME)}`,
             `--load-storage=${getAuthFilePath()}`
         ]);
 
@@ -263,6 +263,7 @@ ipcMain.handle(EVENTS.SPEC_PREPARE_READY_TO_RUN, async (event, taskId) => {
             ));
         }
     } catch (e) {
+        console.error("eeee", e);
         mainWindow?.webContents.send(EVENTS.SPEC_PREPARE_RESULT, createIpcMessage(
             TaskStatus.Error,
             'load file fail'
@@ -272,7 +273,6 @@ ipcMain.handle(EVENTS.SPEC_PREPARE_READY_TO_RUN, async (event, taskId) => {
 });
 
 ipcMain.handle(EVENTS.RUN_SPEC, async (event, fileName: string) => {
-
     if (mainWindow) {
         mainWindow.webContents.send(EVENTS.SPEC_RUN_STARTED, createIpcMessage(
             TaskStatus.Success,
@@ -283,6 +283,8 @@ ipcMain.handle(EVENTS.RUN_SPEC, async (event, fileName: string) => {
     if (fs.existsSync(RUN_ERROR_PATH)) {
         fs.unlinkSync(RUN_ERROR_PATH);
     }
+
+    console.log("fileName", fileName)
 
     try {
         const command = `npx playwright test --headed ${path.resolve(READY_TO_RUN_FOLDER, fileName)} > runError.log`;

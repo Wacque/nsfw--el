@@ -48,7 +48,8 @@ const RunPage = () => {
         scriptInit,
         handleStartRecorder,
         recording,
-        resetError
+        resetError,
+        resetResult
     } = useContext(TopContext);
     const inputRef = useRef<string>('');
     const [startLoading, setStartLoading] = useState(false);
@@ -86,6 +87,7 @@ const RunPage = () => {
 
     useEffect(() => {
         resetError()
+        resetResult()
     }, []);
 
     const getError = function() {
@@ -145,6 +147,12 @@ const RunPage = () => {
                         <div className="mr-20px">任务名称：{selectedTask?.name}</div>
                         <div className="font-bold mr-20px">任务描述: {selectedTask?.description}</div>
                     </div>
+                    <div className={'mt-20px'}>
+                        <Button type="default" className="mr-10px"
+                                onClick={goRecord}>(1)人工演示</Button>
+                        <Button type="default" className="mr-10px"
+                                onClick={goInit}>(2)初始化任务</Button>
+                    </div>
                     <Divider />
                     <Content>
                         <div className="content-wrapper">
@@ -158,23 +166,21 @@ const RunPage = () => {
                                     <TextArea onChange={inputChange} placeholder={'请描述你的需求'} rows={4} />
                                     <div className={'mt-20px'}>
                                         <Button type="default" className="mr-10px"
-                                                onClick={startOptimize}>优化</Button>
-                                        <Button type="default" className="mr-10px" onClick={startRunSpec}>测试</Button>
-                                        <Button type="default" className="mr-10px">发布</Button>
+                                                onClick={startRunSpec}>(3)测试</Button>
+                                        <Button type="default" className="mr-10px"
+                                                onClick={startOptimize}>(4)优化</Button>
+                                        <Button type="default" className="mr-10px">(5)发布</Button>
                                     </div>
-                                    <div className={'mt-20px'}>
-                                        <Button type="default" className="mr-10px" onClick={goInit}>初始化任务</Button>
-                                        <Button type="default" className="mr-10px" onClick={goRecord}>开始录制</Button>
-                                    </div>
+
                                 </Card>
                             </Flex>
                             {getError()}
                             <Divider />
                             <Card title={
                                 <div className={'flex-space-between'}>
-                                   <div>
-                                       数据区域
-                                   </div>
+                                    <div>
+                                        数据区域
+                                    </div>
                                     <div className={'cursor-pointer'} onClick={refreshData}>
                                         <ReloadOutlined />
                                     </div>
