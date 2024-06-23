@@ -1,6 +1,6 @@
-import React, { createContext, Dispatch, MutableRefObject, useEffect, useRef, useState } from 'react';
-import { CreateTaskResponse, IpcMessage, TaskItem } from '../../interface';
-import { createTask, debugScript, getTaskList, initScript, optimizeScript, submitResult } from './api';
+import React, { createContext, Dispatch, useEffect, useRef, useState } from 'react';
+import { IpcMessage, TaskItem } from '../../interface';
+import { createTask, debugScript, getTaskList, initScript, optimizeScript } from './api';
 import { TARGET_URL, TaskStatus } from '../../constants';
 import { getLatestState } from './utils';
 import { message } from 'antd';
@@ -208,6 +208,9 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
     };
 
     const scriptInit = async function() {
+        nextRunSpecFile.current = ""
+        setRunError("")
+        setRunStatus(TaskStatus.Success)
         const _task = await getLatestState(setSelectedTask);
         const _codegenResult = await getLatestState(setCodegenResult);
         const res = await initScript(Number(_task?.id!) , _codegenResult!);

@@ -80,17 +80,19 @@ const RunPage = () => {
         }
 
         // Convert other types to string for rendering
-        return <Tooltip placement="topLeft" title={text}>
- 	   <span style={{
-           whiteSpace: 'nowrap',
-           overflow: 'hidden',
-           textOverflow: 'ellipsis',
-           maxWidth: 150,
-           display: 'inline-block'
-       }}>
- 		 {JSON.stringify(text)}
- 	   </span>
-        </Tooltip>;
+        return <ErrorBoundary>
+            <Tooltip placement="topLeft" title={JSON.stringify(text)}>
+               <span style={{
+                   whiteSpace: 'nowrap',
+                   overflow: 'hidden',
+                   textOverflow: 'ellipsis',
+                   maxWidth: 150,
+                   display: 'inline-block'
+               }}>
+                 {JSON.stringify(text)}
+               </span>
+            </Tooltip>
+        </ErrorBoundary>;
     };
 
     const getTableData = function() {
@@ -116,7 +118,7 @@ const RunPage = () => {
         if (runStatus === TaskStatus.Error) {
             return <div className={'mt-20px'}>
                 <Alert type={'error'} message={<div>
-                    {runError}
+                   运行出错～～
                 </div>}>
                 </Alert>
                 <Button onClick={startDebug}>一键调试错误</Button>
@@ -179,19 +181,25 @@ const RunPage = () => {
                     <Content>
                         <div className="content-wrapper">
                             <Flex style={{ width: '100%' }}>
-                                <Card title="内嵌浏览器 / 图文渲染区域" style={{ minHeight: 300, flex: 1 }}>
-                                    <div className="browser-area">内嵌浏览器 / 图文渲染区域</div>
-                                </Card>
-                                <div style={{ width: '20px' }}></div>
-                                <Card title="用自然语言描述你的指令"
+                                {/*<Card title="内嵌浏览器 / 图文渲染区域" style={{ minHeight: 300, flex: 1 }}>*/}
+                                {/*    <div className="browser-area">内嵌浏览器 / 图文渲染区域</div>*/}
+                                {/*</Card>*/}
+                                {/*<div style={{ width: '20px' }}></div>*/}
+                                <Card title="请描述你的需求"
                                       style={{ minHeight: 150, flex: 1 }}>
                                     <TextArea onChange={inputChange} placeholder={'请描述你的需求'} rows={4} />
                                     <div className={'mt-20px'}>
-                                        <Button type="default" className="mr-10px"
-                                                onClick={startRunSpec}>(3)测试</Button>
-                                        <Button type="default" className="mr-10px"
-                                                onClick={startOptimize}>(4)优化</Button>
-                                        <Button type="default" className="mr-10px">(5)发布</Button>
+                                        <div className={'flex-space-between'}>
+                                            <div>
+                                                <Button type="default" className="mr-10px"
+                                                        onClick={startRunSpec}>(3)测试</Button>
+                                                <Button type="default" className="mr-10px"
+                                                        onClick={startOptimize}>(4)优化</Button>
+                                            </div>
+                                            <div>
+                                                <Button type="default" className="mr-10px">(5)发布</Button>
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </Card>

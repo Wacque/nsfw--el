@@ -35,7 +35,7 @@ const TaskItemView = function({ item }: { item: TaskItem }) {
         <Card
             title={
                 <div className={'flex-space-between'}>
-                    <span>{item.name}</span>
+                    <div title={item.name} className={'overflow-ellipsis flex-space-between'} style={{width: "70%", whiteSpace: "nowrap"}}>{item.name}</div>
                     <span>{getTag()}</span>
                 </div>
             }
