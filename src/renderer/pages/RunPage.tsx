@@ -96,7 +96,7 @@ const RunPage = () => {
     };
 
     const getTableData = function() {
-        return runResult?.filter(item => !!item.content).map((item, index) => {
+        return runResult?.map((item, index) => {
             return {
                 ...item,
                 key: index
@@ -121,7 +121,7 @@ const RunPage = () => {
                    运行出错～～
                 </div>}>
                 </Alert>
-                <Button onClick={startDebug}>一键调试错误</Button>
+                <Button className={'mt-20px'} onClick={startDebug}>一键调试错误</Button>
             </div>;
         }
 
