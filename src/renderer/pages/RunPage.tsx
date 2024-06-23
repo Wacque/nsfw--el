@@ -118,7 +118,7 @@ const RunPage = () => {
         if (runStatus === TaskStatus.Error) {
             return <div className={'mt-20px'}>
                 <Alert type={'error'} message={<div>
-                   运行出错～～
+                   运行中断～～
                 </div>}>
                 </Alert>
                 <Button className={'mt-20px'} onClick={startDebug}>一键调试错误</Button>

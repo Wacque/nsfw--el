@@ -215,6 +215,8 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
         const _codegenResult = await getLatestState(setCodegenResult);
         const res = await initScript(Number(_task?.id!) , _codegenResult!);
         await afterInitScript(res.data.task_id);
+
+        messageApi.success('初始化任务成功')
     }
 
     const getPreparedFile = async function(taskId: number){

@@ -97,3 +97,4 @@ test('test', async ({ page }) => {
     console.error('Search box not found');
   }
 });
+
