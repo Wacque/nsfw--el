@@ -96,3 +96,10 @@ body {
     padding: 0  20px;
     box-sizing: border-box;
 }
+
+.overflow-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+}
