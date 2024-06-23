@@ -173,9 +173,9 @@ const RunPage = () => {
                     </div>
                     <div className={'mt-20px'}>
                         <Button type="default" className="mr-10px"
-                                onClick={goRecord}>(1)人工演示</Button>
+                                onClick={goRecord}>人工演示</Button>
                         <Button type="default" className="mr-10px"
-                                onClick={goInit}>(2)初始化任务</Button>
+                                onClick={goInit}>初始化任务</Button>
                     </div>
                     <Divider />
                     <Content>
@@ -192,12 +192,12 @@ const RunPage = () => {
                                         <div className={'flex-space-between'}>
                                             <div>
                                                 <Button type="default" className="mr-10px"
-                                                        onClick={startRunSpec}>(3)测试</Button>
-                                                <Button type="default" className="mr-10px"
-                                                        onClick={startOptimize}>(4)优化</Button>
+                                                        onClick={startOptimize}>优化</Button>
                                             </div>
                                             <div>
-                                                <Button type="default" className="mr-10px">(5)发布</Button>
+                                                <Button type="default" className="mr-10px"
+                                                        onClick={startRunSpec}>测试</Button>
+                                                <Button type="default" className="mr-10px">发布</Button>
                                             </div>
                                         </div>
                                     </div>
