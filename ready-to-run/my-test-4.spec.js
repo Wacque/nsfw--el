@@ -33,8 +33,10 @@ test('test', async ({ page }) => {
         const link = card.querySelector('.content .title a')?.href || '';
         const username = card.querySelector('.content .info .name')?.innerText || '';
         const weiboUrl = card.querySelector('.content .from a')?.href || '';
+        const forwards = card.querySelector('.woo-box-flex.woo-box-alignCenter.woo-box-justifyCenter')?.innerText || '0';
+        const publishTime = card.querySelector('.content .from a')?.innerText || '';
 
-        return { title, content, comments, likes, link, username, weiboUrl };
+        return { title, content, comments, likes, link, username, weiboUrl, forwards, publishTime };
       });
     });
 

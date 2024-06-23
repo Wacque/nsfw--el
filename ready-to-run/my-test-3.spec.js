@@ -28,43 +28,20 @@ test('test', async ({ page }) => {
       return cards.map(card => {
         const title = card.querySelector('.content .title')?.innerText || '';
         const content = card.querySelector('.content .txt')?.innerText || '';
+        const comments = card.querySelector('.card-act ul li:nth-child(2) a')?.innerText || '0';
         const likes = card.querySelector('.woo-like-count')?.innerText || '0';
+        const forwards = card.querySelector('.woo-box-flex.woo-box-alignCenter.woo-box-justifyCenter')?.innerText || '0';
         const link = card.querySelector('.content .title a')?.href || '';
         const username = card.querySelector('.content .info .name')?.innerText || '';
         const weiboUrl = card.querySelector('.content .from a')?.href || '';
+        const publishTime = card.querySelector('.content .from a')?.innerText || '';
 
-        return { title, content, likes, link, username, weiboUrl };
+        return { title, content, comments, likes, forwards, link, username, weiboUrl, publishTime };
       });
     });
 
-    // Create a write stream for the results file
-    const writeStream = fs.createWriteStream('result.json', { flags: 'a' });
-    writeStream.write('[');
-
-    for (let i = 0; i < results.length; i++) {
-      // Navigate to the weibo page to get region info
-      if (results[i].weiboUrl) {
-        const newPage = await page.context().newPage();
-        await newPage.goto(results[i].weiboUrl);
-        await newPage.waitForTimeout(Math.random() * 2000 + 1000);
-
-        const region = await newPage.$eval('.head-info_ip_3ywCW', el => el.innerText.replace('发布于', '').trim()).catch(() => '');
-        results[i].region = region;
-
-        await newPage.close();
-      } else {
-        results[i].region = '';
-      }
-
-      // Write each result to the file
-      writeStream.write(JSON.stringify(results[i], null, 2));
-      if (i < results.length - 1) {
-        writeStream.write(',');
-      }
-    }
-
-    writeStream.write(']');
-    writeStream.end();
+    // Save the results to a JSON file
+    fs.writeFileSync('result.json', JSON.stringify(results, null, 2));
   } else {
     console.error('Search box not found');
   }
