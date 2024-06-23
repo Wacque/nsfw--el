@@ -316,6 +316,10 @@ ipcMain.handle(EVENTS.RUN_SPEC, async (event, fileName: string) => {
         fs.unlinkSync(RUN_ERROR_PATH);
     }
 
+    if (fs.existsSync(RUN_RESULT_PATH)) {
+        fs.unlinkSync(RUN_RESULT_PATH);
+    }
+
     console.log("fileName", fileName)
 
     try {

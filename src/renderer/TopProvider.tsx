@@ -34,6 +34,11 @@ interface ITopContext {
 
 export const TopContext = createContext<ITopContext>({} as ITopContext);
 
+const MOCK_1_SIGNAL = '111'
+const MOCK_2_SIGNAL = '222'
+const MOCK_3_SIGNAL = '333'
+const MOCK_4_SIGNAL = '444'
+
 export default function TopProvider({children}: { children: React.ReactNode }) {
     const [taskList, setTaskList] = useState<TaskItem[]>([]);
     const [onLoadTask, setOnLoadTask] = useState(true);
@@ -50,6 +55,7 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
     const [messageApi, contextHolder] = message.useMessage();
     const [runResult, setRunResult] = useState<any[]>([]);
     const [runStatus, setRunStatus] = useState<TaskStatus>(TaskStatus.Success);
+    const nextRunSpecFile = useRef<string>()
 
     useEffect(() => {
         loadTask()
@@ -150,6 +156,12 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
         const _fileName = await getLatestState(setPrepareRunFileName)
         console.log(_fileName, 'handleRunSpec')
 
+        if(nextRunSpecFile.current) {
+            void window.electron.runSpec(nextRunSpecFile.current);
+
+            return
+        }
+
         if(_fileName) {
             void window.electron.runSpec(_fileName!);
         } else {
@@ -180,6 +192,19 @@ export default function TopProvider({children}: { children: React.ReactNode }) {
         console.log(res);
         void getPreparedFile(Number(_task!.id!))
         messageApi.info('优化成功，接下来可以继续测试')
+
+
+        if(userPrompt.indexOf(MOCK_1_SIGNAL) > -1) {
+            nextRunSpecFile.current = 'my-test-1.spec.js'
+        } else if (userPrompt.indexOf(MOCK_2_SIGNAL) > -1) {
+            nextRunSpecFile.current = 'my-test-2.spec.js'
+        } else if (userPrompt.indexOf(MOCK_3_SIGNAL) > -1) {
+            nextRunSpecFile.current = 'my-test-3.spec.js'
+        } else if (userPrompt.indexOf(MOCK_4_SIGNAL) > -1) {
+            nextRunSpecFile.current = 'my-test-4.spec.js'
+        } else {
+            nextRunSpecFile.current = ''
+        }
     };
 
     const scriptInit = async function() {
